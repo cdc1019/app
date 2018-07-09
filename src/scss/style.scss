@@ -9,7 +9,6 @@ body,
 .wrap {
     width: 100%;
     height: 100%;
-    overflow: hidden;
 }
 
 .wrap {
@@ -17,15 +16,19 @@ body,
     flex-direction: column;
 }
 
-header,
-footer {
-    widows: 100%;
+header {
+    width: 100%;
     height: 44px;
-    border-bottom: solid 1px #ccc;
 }
 
 section {
-    flex: 1
+    flex: 1;
+    overflow: auto;
+}
+
+.main {
+    width: 100%;
+    height: auto;
 }
 
 .head {
@@ -52,7 +55,7 @@ section {
         background: #eee;
         padding: 2px;
         dt img {
-            width: 60%;
+            width: 40%;
             height: auto;
         }
         dd span {
@@ -73,7 +76,6 @@ section {
 .list {
     width: 100%;
     height: auto;
-    border: solid 1px #ccc;
 }
 
 .list_dl {
@@ -88,7 +90,7 @@ section {
         border-right: solid 1px #eee;
         border-bottom: solid 1px #eee;
         dt img {
-            width: 60%;
+            width: 40%;
             height: auto;
         }
         dd {
@@ -99,21 +101,34 @@ section {
     }
 }
 
-h3 img {
+h3 {
     width: 100%;
     height: auto;
+    display: inline-block;
+    img {
+        width: 100%;
+        height: auto;
+    }
 }
 
 footer {
+    width: 100%;
+    height: 44px;
     display: flex;
-    text-align: center;
+    padding-top: 5px;
     dl {
         width: 25%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        dt img {
-            width: 30%;
+        height: 100%;
+        text-align: center;
+        dt {
+            width: 100%;
+            height: auto;
+            img {
+                width: 25%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+            }
         }
         dd b {
             font-size: 12px;

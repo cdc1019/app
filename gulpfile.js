@@ -4,19 +4,16 @@ var mincss = require('gulp-clean-css');
 var uglify = require('gulp-uglify')
 var minhtml = require('gulp-htmlmin')
 var server = require('gulp-webserver');
+var es6 = require('gulp-babel')
+var autoprefixer = require('gulp-autoprefixer');
 var url = require('url');
 var path = require('path');
 var fs = require('fs');
 var options = {
     removeComments: true, //清除HTML注释
     collapseWhitespace: true, //压缩HTML
-    // collapseBooleanAttributes: true, //省略布尔属性的值 <input checked="true"/> ==> <input />
-    // removeEmptyAttributes: true, //删除所有空格作属性值 <input id="" /> ==> <input />
-    // removeScriptTypeAttributes: true, //删除<script>的type="text/javascript"
-    // removeStyleLinkTypeAttributes: true, //删除<style>和<link>的type="text/css"
-    // minifyJS: true, //压缩页面JS
-    // minifyCSS: true //压缩页面CSS
 };
+var data = require('./data/data.json')
 gulp.task('server', function() {
     gulp.src('src')
         .pipe(server({
@@ -28,8 +25,12 @@ gulp.task('server', function() {
                 if (pathname === '/favicon.ico') {
                     return;
                 }
-                pathname = pathname === '/' ? '/index.html' : pathname;
-                res.end(fs.readFileSync(path.join(__dirname, pathname)))
+                if (pathname === '/api/list') {
+                    res.end(JSON.stringify({ code: 1, mag: data }))
+                } else {
+                    pathname = pathname === '/' ? '/index.html' : pathname;
+                    res.end(fs.readFileSync(path.join(__dirname, 'src', pathname)))
+                }
             }
         }))
 })
@@ -37,13 +38,19 @@ gulp.task('server', function() {
 // 压缩css
 gulp.task('mincss', function() {
     gulp.src(['./src/scss/*.css', '!./src/scss/*.min.css'])
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions', 'Android >=4.0']
+        }))
         .pipe(mincss())
         .pipe(gulp.dest('build/css'))
 })
 
 //压缩js
 gulp.task('minjs', function() {
-    gulp.src('./src/js/*.js')
+    gulp.src('./src/js/style.js')
+        .pipe(es6({
+            presets: ['es2015']
+        }))
         .pipe(uglify())
         .pipe(gulp.dest('build/js'))
 })
@@ -55,4 +62,4 @@ gulp.task('minhtml', function() {
         .pipe(gulp.dest('build'))
 })
 
-gulp.task('default', ['mincss', 'minjs', 'minhtml'])
+gulp.task('build', ['server', 'mincss', 'minjs', 'minhtml'])
