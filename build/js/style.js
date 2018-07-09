@@ -1,0 +1,1 @@
+var dl=document.querySelectorAll("footer>dl");dl.forEach(function(){this.onclick=function(){console.log(1)}});
